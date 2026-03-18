@@ -33,29 +33,31 @@ LIMIT 3;
 
 -- Q3: List all products purchased by customers from Bangalore
 SELECT DISTINCT
-    c.name                          AS customer_name,
+    c.name                              AS customer_name,
     c.city,
     p.product_name,
     p.category
-FROM read_csv_auto('datasets/customers.csv')        AS c
-JOIN read_json_auto('datasets/orders.json')         AS o
+FROM read_csv_auto('datasets/customers.csv')     AS c
+JOIN read_json_auto('datasets/orders.json')      AS o
     ON c.customer_id = o.customer_id
-JOIN read_parquet('datasets/products.parquet')      AS p
+JOIN read_parquet('datasets/products.parquet')   AS p
     ON o.order_id = p.order_id
 WHERE c.city = 'Bangalore'
 ORDER BY c.name, p.product_name;
 
 -- Q4: Join all three files to show: customer name, order date, product name
 SELECT
-    c.name                          AS customer_name,
-    c.city                          AS customer_city,
+    c.name                              AS customer_name,
+    c.city                              AS customer_city,
     o.order_date,
-    o.total_amount,
     p.product_name,
-    p.category
-FROM read_csv_auto('datasets/customers.csv')        AS c
-JOIN read_json_auto('datasets/orders.json')         AS o
+    p.category,
+    p.quantity,
+    p.unit_price,
+    p.total_price
+FROM read_csv_auto('datasets/customers.csv')     AS c
+JOIN read_json_auto('datasets/orders.json')      AS o
     ON c.customer_id = o.customer_id
-JOIN read_parquet('datasets/products.parquet')      AS p
+JOIN read_parquet('datasets/products.parquet')   AS p
     ON o.order_id = p.order_id
 ORDER BY o.order_date DESC;
